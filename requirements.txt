@@ -1,3 +1,8 @@
 pandas
 nltk
 scikit-learn
+requests
+beautifulsoup4
+matplotlib
+seaborn
+tqdm
