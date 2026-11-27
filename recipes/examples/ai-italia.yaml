@@ -1,0 +1,28 @@
+# Build with: rpa dataset build recipes/examples/ai-italia.yaml
+# The recipe only shapes what is already in your local database: collect first.
+name: ai-italia-2026
+collection: ai-italia          # a collection you filled with `rpa collect ...`
+search: "intelligenza artificiale"   # optional: local full-text match on title and selftext
+unit: post                     # post | comment | pair (post -> its top reply)
+
+filters:
+  subreddits: [italy, ItaliaPersonalFinance]
+  min_score: 5
+  after: 2026-01-01
+  lang: it                     # needs: pip install reddit-post-analyzer[nlp]
+  exclude_removed: true
+  exclude_bots: true
+  min_chars: 40
+
+transform:
+  text: "{title}\n\n{selftext}"
+  strip: [urls, markdown, usernames]
+  dedup: exact                 # none | exact | near
+
+split:                         # optional, deterministic, a thread never crosses parts
+  parts: { a: 0.8, b: 0.2 }
+  seed: 42
+
+output:
+  format: jsonl                # csv | jsonl | parquet | hf
+  fields: [id, subreddit, created_utc, score, num_comments, text]

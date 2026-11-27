@@ -355,15 +355,30 @@ class Database:
         return _to_post(row) if row else None
 
     def iter_posts(
-        self, collection: str | None = None, subreddit: str | None = None
+        self,
+        collection: str | None = None,
+        subreddit: str | None = None,
+        text: str | None = None,
+        oldest_first: bool = False,
     ) -> Iterator[Post]:
-        """Posts, newest first, optionally limited to a collection and/or subreddit."""
+        """Posts, newest first (or oldest first), optionally limited to a collection,
+        a subreddit and/or a full-text match on title and selftext (all terms must match)."""
         sql, args = "SELECT p.* FROM posts p WHERE 1=1", []
         clause, extra = self._in_collection(collection)
         sql, args = sql + clause, [*args, *extra]
         if subreddit is not None:
             sql, args = sql + " AND p.subreddit = ? COLLATE NOCASE", [*args, subreddit]
-        sql += " ORDER BY p.created_utc DESC, p.id"
+        if text is not None:
+            match = _fts_query(text)
+            if not match:
+                return
+            sql += " AND p.rid IN (SELECT rowid FROM posts_fts WHERE posts_fts MATCH ?)"
+            args.append(match)
+        sql += (
+            " ORDER BY p.created_utc, p.id"
+            if oldest_first
+            else " ORDER BY p.created_utc DESC, p.id"
+        )
         for row in self._conn.execute(sql, args):
             yield _to_post(row)
 

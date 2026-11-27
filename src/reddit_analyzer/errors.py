@@ -37,3 +37,7 @@ class CredentialStoreError(RedditError):
 
 class StorageError(RedditError):
     """The local database is unusable, too new for this version, or a record is missing."""
+
+
+class DatasetError(RedditError):
+    """A dataset recipe is invalid, or a dataset cannot be built or exported."""
