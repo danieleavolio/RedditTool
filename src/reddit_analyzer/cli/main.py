@@ -3,7 +3,7 @@
 import typer
 
 from reddit_analyzer import __version__
-from reddit_analyzer.cli import auth
+from reddit_analyzer.cli import auth, db, runs
 
 app = typer.Typer(
     name="rpa",
@@ -12,6 +12,8 @@ app = typer.Typer(
     add_completion=False,
 )
 app.add_typer(auth.app, name="auth")
+app.add_typer(runs.app, name="runs")
+app.add_typer(db.app, name="db")
 
 
 def _version_callback(value: bool) -> None:
