@@ -79,7 +79,7 @@ if st.sidebar.button("Cerca e Salva Post", key="scrape_button"):
                 inserted_count = scraper.scrape_and_store()
                 st.sidebar.success(f"Completato! {inserted_count} nuovi post inseriti nel database per '{query_input}'.")
                 st.cache_data.clear() 
-                st.experimental_rerun() 
+                st.rerun()
             except Exception as e:
                 st.sidebar.error(f"Errore durante lo scraping: {e}")
                 logger.error(f"Errore scraping in Streamlit UI: {e}", exc_info=True)
