@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://danieleavolio.github.io/RedditTool/</loc>
+         <lastmod>2026-11-27</lastmod>
+    </url>
+    <url>
+         <loc>https://danieleavolio.github.io/RedditTool/analyzers/</loc>
+         <lastmod>2026-11-27</lastmod>
+    </url>
+    <url>
+         <loc>https://danieleavolio.github.io/RedditTool/cli/</loc>
+         <lastmod>2026-11-27</lastmod>
+    </url>
+    <url>
+         <loc>https://danieleavolio.github.io/RedditTool/quickstart/</loc>
+         <lastmod>2026-11-27</lastmod>
+    </url>
+    <url>
+         <loc>https://danieleavolio.github.io/RedditTool/recipes/</loc>
+         <lastmod>2026-11-27</lastmod>
+    </url>
+    <url>
+         <loc>https://danieleavolio.github.io/RedditTool/reddit-credentials/</loc>
+         <lastmod>2026-11-27</lastmod>
+    </url>
+</urlset>

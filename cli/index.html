@@ -1,0 +1,1357 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Collect Reddit content locally, build reproducible datasets and analyze them.">
+      
+      
+      
+        <link rel="canonical" href="https://danieleavolio.github.io/RedditTool/cli/">
+      
+      
+        <link rel="prev" href="../analyzers/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>CLI reference - Reddit Post Analyzer</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cli-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Reddit Post Analyzer" class="md-header__button md-logo" aria-label="Reddit Post Analyzer" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Reddit Post Analyzer
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CLI reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/danieleavolio/RedditTool" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    danieleavolio/RedditTool
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Reddit Post Analyzer" class="md-nav__button md-logo" aria-label="Reddit Post Analyzer" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Reddit Post Analyzer
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/danieleavolio/RedditTool" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    danieleavolio/RedditTool
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reddit-credentials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reddit credentials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analyzers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyzers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rpa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rpa
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="rpa">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analyze" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        analyze
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="auth">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        login
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        logout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        collect
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="collect">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subreddit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        subreddit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        collections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="collections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dataset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="dataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        preview
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#db" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        db
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="db">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#import-legacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        import-legacy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        export
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gui
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        runs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="runs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resume
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tui
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rpa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rpa
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="rpa">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analyze" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        analyze
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auth
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="auth">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        login
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        logout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        collect
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="collect">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subreddit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        subreddit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        collections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="collections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dataset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="dataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        preview
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#db" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        db
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="db">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#import-legacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        import-legacy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        export
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gui
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        runs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="runs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resume
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tui
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="cli-reference">CLI reference<a class="headerlink" href="#cli-reference" title="Permanent link">&para;</a></h1>
+<p>Generated from the code, so it is always current. Put <code>--quiet</code> / <code>--verbose</code> before the command:
+<code>rpa -q runs list</code>. Every command takes <code>--json</code> for machine-readable output.</p>
+<p><strong>Exit codes:</strong> 0 ok · 1 other error · 2 usage error · 3 credentials missing or rejected ·
+4 Reddit unreachable or rate limited · 130 interrupted.</p>
+<h2 id="rpa">rpa<a class="headerlink" href="#rpa" title="Permanent link">&para;</a></h2>
+<p>Reddit Post Analyzer: collect, store, build datasets from and analyze Reddit content.</p>
+<p>Usage:</p>
+<pre><code>rpa [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p>Options:</p>
+<pre><code>  --version             Show version and exit.
+  -q, --quiet           Only print results and errors (no progress or notes).
+  -v, --verbose         Log debug details to stderr.
+  --install-completion  Install completion for the current shell.
+  --show-completion     Show completion for the current shell, to copy it or
+                        customize the installation.
+</code></pre>
+<h3 id="analyze">analyze<a class="headerlink" href="#analyze" title="Permanent link">&para;</a></h3>
+<p>Compute statistics, keywords, languages and sentiment, and store them for the UIs.</p>
+<p>Usage:</p>
+<pre><code>rpa analyze [OPTIONS] [collection]
+</code></pre>
+<p>Options:</p>
+<pre><code>  collection &lt;str&gt;            Collection name (default: the whole database).
+  -a, --analyzer &lt;list[str]&gt;  Analyzer to run, repeatable (default: all
+                              ready).
+  --show                      Show stored results without computing anything.
+  --list                      List the available analyzers and exit.
+  --json                      Print machine-readable JSON on stdout instead of
+                              text.
+</code></pre>
+<h3 id="auth">auth<a class="headerlink" href="#auth" title="Permanent link">&para;</a></h3>
+<p>Manage Reddit credentials.</p>
+<p>Usage:</p>
+<pre><code>rpa auth [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<h4 id="login">login<a class="headerlink" href="#login" title="Permanent link">&para;</a></h4>
+<p>Authorize this tool in your browser and store the refresh token in the system keyring.</p>
+<p>Usage:</p>
+<pre><code>rpa auth login [OPTIONS]
+</code></pre>
+<p>Options:</p>
+<pre><code>  --client-id &lt;str&gt;  Reddit app client ID.
+  --no-browser       Only print the URL.
+</code></pre>
+<h4 id="logout">logout<a class="headerlink" href="#logout" title="Permanent link">&para;</a></h4>
+<p>Revoke the refresh token at Reddit (best effort) and remove stored credentials.</p>
+<p>Usage:</p>
+<pre><code>rpa auth logout [OPTIONS]
+</code></pre>
+<p>Options:</p>
+<pre><code>  --json  Print machine-readable JSON on stdout instead of text.
+</code></pre>
+<h4 id="test">test<a class="headerlink" href="#test" title="Permanent link">&para;</a></h4>
+<p>Check that the stored credentials work and show the remaining rate limit.</p>
+<p>Usage:</p>
+<pre><code>rpa auth test [OPTIONS]
+</code></pre>
+<p>Options:</p>
+<pre><code>  --json  Print machine-readable JSON on stdout instead of text.
+</code></pre>
+<h3 id="collect">collect<a class="headerlink" href="#collect" title="Permanent link">&para;</a></h3>
+<p>Collect posts and comments from Reddit.</p>
+<p>Usage:</p>
+<pre><code>rpa collect [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<h4 id="search">search<a class="headerlink" href="#search" title="Permanent link">&para;</a></h4>
+<p>Search Reddit (all of it, or the given subreddits) and store the posts.</p>
+<p>Usage:</p>
+<pre><code>rpa collect search [OPTIONS] {query}
+</code></pre>
+<p>Options:</p>
+<pre><code>  query &lt;str&gt;                     Keywords to search for.  [required]
+  -s, --subreddit &lt;list[str]&gt;     Limit to a subreddit (repeatable).
+  --sort &lt;relevance|hot|top|new|comments&gt;
+                                  Result order.  [default: relevance]
+  -t, --time &lt;hour|day|week|month|year|all&gt;
+                                  Time window.  [default: all]
+  -n, --limit &lt;int range&gt;         Maximum number of posts.  [default: 100;
+                                  x&gt;=1]
+  --comments                      Also download the comments of every post.
+  --depth &lt;int range&gt;             Comment depth (default: from config).
+                                  [x&gt;=1]
+  --max-per-post &lt;int range&gt;      Comments per post (default: from config).
+                                  [x&gt;=1]
+  -c, --collection &lt;str&gt;          Collection to add to (default: derived from
+                                  input).
+  --json                          Print machine-readable JSON on stdout
+                                  instead of text.
+</code></pre>
+<h4 id="subreddit">subreddit<a class="headerlink" href="#subreddit" title="Permanent link">&para;</a></h4>
+<p>Read a subreddit's hot/new/top/rising/controversial listing and store the posts.</p>
+<p>Usage:</p>
+<pre><code>rpa collect subreddit [OPTIONS] {name}
+</code></pre>
+<p>Options:</p>
+<pre><code>  name &lt;str&gt;                      Subreddit name, with or without r/.
+                                  [required]
+  --sort &lt;hot|new|top|rising|controversial&gt;
+                                  Listing to read.  [default: new]
+  -t, --time &lt;hour|day|week|month|year|all&gt;
+                                  Time window (top and controversial).
+                                  [default: all]
+  -n, --limit &lt;int range&gt;         Maximum number of posts.  [default: 100;
+                                  x&gt;=1]
+  --comments                      Also download the comments of every post.
+  --depth &lt;int range&gt;             Comment depth (default: from config).
+                                  [x&gt;=1]
+  --max-per-post &lt;int range&gt;      Comments per post (default: from config).
+                                  [x&gt;=1]
+  -c, --collection &lt;str&gt;          Collection to add to (default: derived from
+                                  input).
+  --json                          Print machine-readable JSON on stdout
+                                  instead of text.
+</code></pre>
+<h3 id="collections">collections<a class="headerlink" href="#collections" title="Permanent link">&para;</a></h3>
+<p>Inspect local collections.</p>
+<p>Usage:</p>
+<pre><code>rpa collections [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<h4 id="list">list<a class="headerlink" href="#list" title="Permanent link">&para;</a></h4>
+<p>Show every collection with its post and comment counts.</p>
+<p>Usage:</p>
+<pre><code>rpa collections list [OPTIONS]
+</code></pre>
+<p>Options:</p>
+<pre><code>  --json  Print machine-readable JSON on stdout instead of text.
+</code></pre>
+<h3 id="dataset">dataset<a class="headerlink" href="#dataset" title="Permanent link">&para;</a></h3>
+<p>Build datasets from YAML recipes.</p>
+<p>Usage:</p>
+<pre><code>rpa dataset [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<h4 id="build">build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h4>
+<p>Write the dataset and its dataset_card.md.</p>
+<p>Usage:</p>
+<pre><code>rpa dataset build [OPTIONS] {recipe_path}
+</code></pre>
+<p>Options:</p>
+<pre><code>  recipe_path &lt;path&gt;  A recipe file, see recipes/examples/.  [required]
+  -o, --out &lt;path&gt;    Output folder (default: out/&lt;name&gt;).
+  --json              Print machine-readable JSON on stdout instead of text.
+</code></pre>
+<h4 id="preview">preview<a class="headerlink" href="#preview" title="Permanent link">&para;</a></h4>
+<p>Show the first rows and statistics, without writing anything.</p>
+<p>Usage:</p>
+<pre><code>rpa dataset preview [OPTIONS] {recipe_path}
+</code></pre>
+<p>Options:</p>
+<pre><code>  recipe_path &lt;path&gt;   A recipe file, see recipes/examples/.  [required]
+  -n, --n &lt;int range&gt;  Rows to show.  [default: 20; x&gt;=1]
+  --json               Print machine-readable JSON on stdout instead of text.
+</code></pre>
+<h3 id="db">db<a class="headerlink" href="#db" title="Permanent link">&para;</a></h3>
+<p>Local database maintenance.</p>
+<p>Usage:</p>
+<pre><code>rpa db [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<h4 id="import-legacy">import-legacy<a class="headerlink" href="#import-legacy" title="Permanent link">&para;</a></h4>
+<p>Import a pre-0.2 database: one collection per search query. Safe to repeat.</p>
+<p>Usage:</p>
+<pre><code>rpa db import-legacy [OPTIONS] {path}
+</code></pre>
+<p>Options:</p>
+<pre><code>  path &lt;path&gt;  The old data/reddit_posts.db file.  [required]
+  --json       Print machine-readable JSON on stdout instead of text.
+</code></pre>
+<h3 id="export">export<a class="headerlink" href="#export" title="Permanent link">&para;</a></h3>
+<p>Export a collection as it is, with default columns. For filters use <code>rpa dataset build</code>.</p>
+<p>Usage:</p>
+<pre><code>rpa export [OPTIONS] {collection}
+</code></pre>
+<p>Options:</p>
+<pre><code>  collection &lt;str&gt;                Collection name, see `rpa collections list`.
+                                  [required]
+  -f, --format &lt;csv|jsonl|parquet|hf&gt;
+                                  [default: jsonl]
+  --unit &lt;post|comment|pair&gt;      Rows are posts, comments or post/reply
+                                  pairs.  [default: post]
+  -o, --out &lt;path&gt;                Output folder (default: out/&lt;collection&gt;).
+  --json                          Print machine-readable JSON on stdout
+                                  instead of text.
+</code></pre>
+<h3 id="gui">gui<a class="headerlink" href="#gui" title="Permanent link">&para;</a></h3>
+<p>Open the web UI in the browser (needs: pip install "reddit-post-analyzer[gui]").</p>
+<p>Usage:</p>
+<pre><code>rpa gui [OPTIONS]
+</code></pre>
+<p>Options:</p>
+<pre><code>  --port &lt;int&gt;  Port of the local web server.  [default: 8501]
+</code></pre>
+<h3 id="runs">runs<a class="headerlink" href="#runs" title="Permanent link">&para;</a></h3>
+<p>List and resume collection runs.</p>
+<p>Usage:</p>
+<pre><code>rpa runs [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<h4 id="list_1">list<a class="headerlink" href="#list_1" title="Permanent link">&para;</a></h4>
+<p>Show recent runs, newest first.</p>
+<p>Usage:</p>
+<pre><code>rpa runs list [OPTIONS]
+</code></pre>
+<p>Options:</p>
+<pre><code>  -c, --collection &lt;str&gt;          Only this collection.
+  --status &lt;pending|running|completed|failed|cancelled&gt;
+                                  Only runs in this state.
+  -n, --limit &lt;int range&gt;         How many runs to show.  [default: 20; x&gt;=1]
+  --json                          Print machine-readable JSON on stdout
+                                  instead of text.
+</code></pre>
+<h4 id="resume">resume<a class="headerlink" href="#resume" title="Permanent link">&para;</a></h4>
+<p>Continue an interrupted or failed run from its last saved page.</p>
+<p>Usage:</p>
+<pre><code>rpa runs resume [OPTIONS] {run_id}
+</code></pre>
+<p>Options:</p>
+<pre><code>  run_id &lt;int&gt;  Run ID, see `rpa runs list`.  [required]
+  --json        Print machine-readable JSON on stdout instead of text.
+</code></pre>
+<h3 id="tui">tui<a class="headerlink" href="#tui" title="Permanent link">&para;</a></h3>
+<p>Open the terminal UI (needs: pip install "reddit-post-analyzer[tui]").</p>
+<p>Usage:</p>
+<pre><code>rpa tui [OPTIONS]
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>
