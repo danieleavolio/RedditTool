@@ -81,6 +81,7 @@
                     "kind": "more",
                     "data": {
                       "count": 7,
+                      "depth": 1,
                       "parent_id": "t1_c1",
                       "children": ["c9", "c10"]
                     }
