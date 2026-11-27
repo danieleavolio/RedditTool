@@ -216,3 +216,12 @@ class Collection(Model):
     name: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{0,63}$")
     description: str = ""
     created_at: datetime = Field(default_factory=_now)
+
+
+class AnalysisResult(Model):
+    """The stored output of one analyzer on one collection (``None``: the whole database)."""
+
+    analyzer: str
+    collection: str | None = None
+    data: dict[str, Any]  # JSON-serializable; the shape belongs to the analyzer
+    computed_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

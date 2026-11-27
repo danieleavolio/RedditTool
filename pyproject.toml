@@ -24,30 +24,49 @@ dependencies = [
     "platformdirs>=4",
     "pydantic>=2.7",
     "pydantic-settings>=2.3",
+    "pyyaml>=6",
     "tomli-w>=1.0",
     "typer>=0.12",
 ]
 
 [project.optional-dependencies]
 tui = ["textual>=0.80"]
-gui = ["streamlit>=1.40", "plotly>=5"]
-nlp = ["langdetect", "nltk", "scikit-learn"]
+gui = ["streamlit>=1.50", "plotly>=5"]
+nlp = ["langdetect", "vaderSentiment"]
 parquet = ["pyarrow"]
 hf = ["datasets"]
 ai = ["anthropic"]
+
+[project.urls]
+Homepage = "https://github.com/danieleavolio/RedditTool"
+Documentation = "https://danieleavolio.github.io/RedditTool/"
+Issues = "https://github.com/danieleavolio/RedditTool/issues"
+Changelog = "https://github.com/danieleavolio/RedditTool/blob/main/CHANGELOG.md"
 
 [project.scripts]
 rpa = "reddit_analyzer.cli.main:app"
 
 [dependency-groups]
-dev = ["pytest>=8", "respx>=0.21", "ruff>=0.6"]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=1.5.0",
+    "pytest-textual-snapshot>=1.0.0",
+    "respx>=0.21",
+    "ruff>=0.6",
+    "textual>=8.2.8",
+    "streamlit>=1.50",
+    "plotly>=5",
+    "langdetect",
+    "vaderSentiment",
+]
+docs = ["mkdocs-material>=9", "mkdocs-typer>=0.0.3"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/reddit_analyzer"]
 
 [tool.ruff]
 line-length = 100
-extend-exclude = ["legacy", "*.md"]
+extend-exclude = ["*.md"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
@@ -55,4 +74,6 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-m 'not live'"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 markers = ["live: hits the real Reddit API; skipped without RPA_* credentials"]

@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest an improvement or a new analyzer / exporter
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to see?
+  - type: markdown
+    attributes:
+      value: >
+        Requests that would bypass Reddit's rate limits, scrape without credentials or help
+        train ML/AI models on Reddit data are out of scope (see the disclaimer in the README).

@@ -20,6 +20,7 @@ from pydantic import TypeAdapter
 from reddit_analyzer.config import Settings, load_settings
 from reddit_analyzer.errors import StorageError
 from reddit_analyzer.models import (
+    AnalysisResult,
     Collection,
     Comment,
     ContentStatus,
@@ -355,15 +356,30 @@ class Database:
         return _to_post(row) if row else None
 
     def iter_posts(
-        self, collection: str | None = None, subreddit: str | None = None
+        self,
+        collection: str | None = None,
+        subreddit: str | None = None,
+        text: str | None = None,
+        oldest_first: bool = False,
     ) -> Iterator[Post]:
-        """Posts, newest first, optionally limited to a collection and/or subreddit."""
+        """Posts, newest first (or oldest first), optionally limited to a collection,
+        a subreddit and/or a full-text match on title and selftext (all terms must match)."""
         sql, args = "SELECT p.* FROM posts p WHERE 1=1", []
         clause, extra = self._in_collection(collection)
         sql, args = sql + clause, [*args, *extra]
         if subreddit is not None:
             sql, args = sql + " AND p.subreddit = ? COLLATE NOCASE", [*args, subreddit]
-        sql += " ORDER BY p.created_utc DESC, p.id"
+        if text is not None:
+            match = _fts_query(text)
+            if not match:
+                return
+            sql += " AND p.rid IN (SELECT rowid FROM posts_fts WHERE posts_fts MATCH ?)"
+            args.append(match)
+        sql += (
+            " ORDER BY p.created_utc, p.id"
+            if oldest_first
+            else " ORDER BY p.created_utc DESC, p.id"
+        )
         for row in self._conn.execute(sql, args):
             yield _to_post(row)
 
@@ -399,3 +415,44 @@ class Database:
             args,
         )
         return row.fetchone()[0]
+
+    # -- Analysis results ---------------------------------------------------------------
+
+    def save_analysis(self, result: AnalysisResult) -> None:
+        """Store (or replace) the result of an analyzer. ``''`` stands for "all collections"."""
+        self._conn.execute(
+            "INSERT OR REPLACE INTO analysis_results(collection, analyzer, result, computed_at)"
+            " VALUES (?, ?, ?, ?)",
+            (
+                result.collection or "",
+                result.analyzer,
+                json.dumps(result.data),
+                result.computed_at.isoformat(),
+            ),
+        )
+
+    def list_analyses(self, collection: str | None = None) -> list[AnalysisResult]:
+        rows = self._conn.execute(
+            "SELECT * FROM analysis_results WHERE collection = ? ORDER BY analyzer",
+            (collection or "",),
+        )
+        return [
+            AnalysisResult(
+                analyzer=r["analyzer"],
+                collection=r["collection"] or None,
+                data=json.loads(r["result"]),
+                computed_at=_dt(r["computed_at"]),
+            )
+            for r in rows
+        ]
+
+    def get_analysis(self, analyzer: str, collection: str | None = None) -> AnalysisResult | None:
+        return next((a for a in self.list_analyses(collection) if a.analyzer == analyzer), None)
+
+    def set_post_languages(self, languages: dict[str, str]) -> None:
+        """Store the detected language (ISO code) of posts, by post id."""
+        with self.transaction():
+            self._conn.executemany(
+                "UPDATE posts SET lang = ? WHERE id = ?",
+                [(lang, post_id) for post_id, lang in languages.items()],
+            )

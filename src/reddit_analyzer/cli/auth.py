@@ -10,6 +10,7 @@ import httpx
 import typer
 from pydantic import SecretStr
 
+from reddit_analyzer.cli.common import JsonOption, cli_errors, get_ui
 from reddit_analyzer.config import (
     Credentials,
     clear_secrets,
@@ -28,11 +29,6 @@ from reddit_analyzer.sources.auth import (
 from reddit_analyzer.sources.oauth import RedditClient
 
 app = typer.Typer(help="Manage Reddit credentials.", no_args_is_help=True)
-
-
-def _fail(exc: Exception) -> typer.Exit:
-    typer.echo(f"Error: {exc}", err=True)
-    return typer.Exit(1)
 
 
 @app.command()
@@ -54,7 +50,7 @@ def login(
         webbrowser.open(url)
     typer.echo(f"Waiting for Reddit to redirect to {redirect_uri} ...")
 
-    try:
+    with cli_errors(get_ui()):
         with httpx.Client(timeout=settings.collect.timeout_seconds) as http:
             code = wait_for_code(redirect_uri, state)
             tokens = exchange_code(http, client_id, client_secret, code, redirect_uri)
@@ -68,22 +64,21 @@ def login(
         store_secret("client_secret", client_secret)
         store_secret("refresh_token", tokens.refresh_token or "")
         store_secret("username", status.username)
-    except RedditError as exc:
-        raise _fail(exc) from exc
     typer.echo(f"Logged in as u/{status.username}. Credentials saved.")
 
 
 @app.command()
-def test() -> None:
+def test(json: JsonOption = False) -> None:
     """Check that the stored credentials work and show the remaining rate limit."""
-    try:
-        with RedditClient.from_config() as client:
-            status = client.check_auth()
-    except RedditError as exc:
-        raise _fail(exc) from exc
-    typer.echo(f"OK: logged in as u/{status.username}")
+    ui = get_ui(json)
+    with cli_errors(ui), RedditClient.from_config() as client:
+        status = client.check_auth()
+    if ui.json:
+        ui.emit(status.model_dump(mode="json"))
+        return
+    ui.result(f"OK: logged in as u/{status.username}")
     if status.ratelimit_remaining is not None:
-        typer.echo(
+        ui.result(
             f"Rate limit: {status.ratelimit_remaining:.0f} requests left, "
             f"{status.ratelimit_used or 0:.0f} used, resets in "
             f"{status.ratelimit_reset_seconds or 0:.0f}s"
@@ -91,7 +86,7 @@ def test() -> None:
 
 
 @app.command()
-def logout() -> None:
+def logout(json: JsonOption = False) -> None:
     """Revoke the refresh token at Reddit (best effort) and remove stored credentials."""
     try:
         creds = get_credentials()
@@ -106,5 +101,9 @@ def logout() -> None:
     except (RedditError, httpx.HTTPError):
         pass  # nothing to revoke, or Reddit unreachable: still remove the local copy
     clear_secrets()
-    typer.echo("Logged out. Credentials removed from the system keyring.")
-    typer.echo("Environment variables (RPA_*) and config.toml are left untouched.")
+    ui = get_ui(json)
+    if ui.json:
+        ui.emit({"logged_out": True})
+        return
+    ui.result("Logged out. Credentials removed from the system keyring.")
+    ui.info("Environment variables (RPA_*) and config.toml are left untouched.")

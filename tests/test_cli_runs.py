@@ -4,11 +4,11 @@ import pytest
 from fakes import FakeSource
 from typer.testing import CliRunner
 
-from reddit_analyzer.cli import runs as runs_cli
 from reddit_analyzer.cli.main import app
 from reddit_analyzer.collect.runner import run_collection
 from reddit_analyzer.errors import ServerError
 from reddit_analyzer.models import ListingParams, Run, SearchParams
+from reddit_analyzer.sources.oauth import RedditClient
 from reddit_analyzer.storage import Database
 
 runner = CliRunner()
@@ -56,9 +56,7 @@ def test_resume_continues_a_failed_run(monkeypatch):
         def __exit__(self, *exc):
             pass
 
-    monkeypatch.setattr(
-        runs_cli.RedditClient, "from_config", classmethod(lambda cls: FakeClient(total=25))
-    )
+    monkeypatch.setattr(RedditClient, "from_config", classmethod(lambda cls: FakeClient(total=25)))
     result = runner.invoke(app, ["runs", "resume", str(run.id)])
 
     assert result.exit_code == 0, result.output

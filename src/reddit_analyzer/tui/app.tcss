@@ -1,0 +1,140 @@
+.pane-title {
+    text-style: bold;
+    margin: 1 0 0 1;
+    color: $accent;
+}
+
+.note {
+    margin: 0 1;
+    color: $text-muted;
+}
+
+.error {
+    color: $error;
+    margin: 0 1;
+}
+
+/* Dashboard */
+#collections, #runs {
+    height: 1fr;
+    margin: 0 1;
+}
+
+/* Collect */
+#collect-form {
+    height: auto;
+    padding: 0 1;
+}
+.form-row {
+    height: auto;
+}
+.form-row > Label {
+    width: 14;
+}
+.form-row > Input, .form-row > Select {
+    width: 1fr;
+}
+#collect-buttons {
+    height: auto;
+    margin: 1 1 0 1;
+}
+#collect-buttons Button {
+    margin-right: 2;
+}
+#progress {
+    margin: 1 1 0 1;
+}
+#collect-log {
+    height: 1fr;
+    margin: 1;
+    border: round $primary;
+}
+
+/* Browser */
+#browser-filters {
+    height: auto;
+    padding: 0 1;
+}
+#browser-filters Input, #browser-filters Select {
+    width: 1fr;
+    margin-right: 1;
+}
+#browser-body {
+    height: 1fr;
+}
+#posts {
+    width: 1fr;
+    margin-left: 1;
+}
+#preview-pane {
+    width: 1fr;
+    margin: 0 1;
+    border: round $primary;
+    padding: 0 1;
+}
+
+/* Dataset */
+#dataset-bar {
+    height: auto;
+    padding: 0 1;
+}
+#dataset-bar Select {
+    width: 1fr;
+}
+#dataset-bar Button, #dataset-save Button {
+    margin-left: 1;
+}
+#dataset-body {
+    height: 1fr;
+}
+#editor-col, #result-col {
+    width: 1fr;
+}
+#recipe-editor {
+    height: 1fr;
+    margin: 0 1;
+}
+#dataset-save {
+    height: auto;
+    padding: 0 1;
+}
+#dataset-save Input {
+    width: 1fr;
+}
+#recipe-status {
+    height: auto;
+    max-height: 12;
+    margin: 0 1;
+}
+#preview-rows {
+    height: 1fr;
+    margin: 0 1;
+}
+
+/* Analysis */
+#analysis-bar {
+    height: auto;
+    padding: 0 1;
+}
+#analysis-summary {
+    margin: 1 1 0 1;
+}
+#analysis-body {
+    height: 1fr;
+}
+#analysis-body > Vertical {
+    width: 1fr;
+}
+#analysis-body DataTable {
+    height: 1fr;
+    margin: 0 1;
+}
+#months {
+    margin: 0 1;
+    height: 3;
+}
+#analyzers-text {
+    margin: 0 1;
+    height: auto;
+    max-height: 8;
+}
