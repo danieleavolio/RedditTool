@@ -146,5 +146,5 @@ def test_runs_list_json(fake_reddit):
 
 def test_help_offers_shell_completion():
     result = runner.invoke(app, ["--help"])
-    output = re.sub(r"\[[0-9;]*m", "", result.output)  # CI forces colors, which split flags
+    output = re.sub(chr(27) + r"\[[0-9;]*m", "", result.output)  # CI forces colors
     assert "--install-completion" in output and "--quiet" in output
