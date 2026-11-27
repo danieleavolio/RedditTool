@@ -1,4 +1,5 @@
 import json
+import re
 
 import pytest
 from fakes import FakeSource
@@ -145,4 +146,5 @@ def test_runs_list_json(fake_reddit):
 
 def test_help_offers_shell_completion():
     result = runner.invoke(app, ["--help"])
-    assert "--install-completion" in result.output and "--quiet" in result.output
+    output = re.sub(r"\[[0-9;]*m", "", result.output)  # CI forces colors, which split flags
+    assert "--install-completion" in output and "--quiet" in output

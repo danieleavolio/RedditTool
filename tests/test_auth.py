@@ -1,5 +1,6 @@
 import socket
 import threading
+import time
 import urllib.request
 from urllib.parse import parse_qs, urlparse
 
@@ -40,10 +41,13 @@ def test_authorize_url():
 
 def _hit(port: int, query: str) -> None:
     def go():
-        try:
-            urllib.request.urlopen(f"http://127.0.0.1:{port}/?{query}", timeout=5).read()
-        except Exception:
-            pass
+        # the listener starts a moment after this thread: retry until it accepts the connection
+        for _ in range(50):
+            try:
+                urllib.request.urlopen(f"http://127.0.0.1:{port}/?{query}", timeout=5).read()
+                return
+            except Exception:
+                time.sleep(0.1)
 
     threading.Thread(target=go).start()
 
