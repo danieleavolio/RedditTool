@@ -1945,11 +1945,13 @@ tui = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "plotly" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-textual-snapshot" },
     { name = "respx" },
     { name = "ruff" },
+    { name = "streamlit" },
     { name = "textual" },
 ]
 
@@ -1968,7 +1970,7 @@ requires-dist = [
     { name = "pydantic-settings", specifier = ">=2.3" },
     { name = "pyyaml", specifier = ">=6" },
     { name = "scikit-learn", marker = "extra == 'nlp'" },
-    { name = "streamlit", marker = "extra == 'gui'", specifier = ">=1.40" },
+    { name = "streamlit", marker = "extra == 'gui'", specifier = ">=1.50" },
     { name = "textual", marker = "extra == 'tui'", specifier = ">=0.80" },
     { name = "tomli-w", specifier = ">=1.0" },
     { name = "typer", specifier = ">=0.12" },
@@ -1977,11 +1979,13 @@ provides-extras = ["tui", "gui", "nlp", "parquet", "hf", "ai"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "plotly", specifier = ">=5" },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-asyncio", specifier = ">=1.5.0" },
     { name = "pytest-textual-snapshot", specifier = ">=1.0.0" },
     { name = "respx", specifier = ">=0.21" },
     { name = "ruff", specifier = ">=0.6" },
+    { name = "streamlit", specifier = ">=1.50" },
     { name = "textual", specifier = ">=8.2.8" },
 ]
 

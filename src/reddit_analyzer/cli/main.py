@@ -38,6 +38,27 @@ def tui_cmd() -> None:
     run()
 
 
+@app.command("gui")
+def gui_cmd(
+    port: int = typer.Option(8501, "--port", help="Port of the local web server."),
+) -> None:
+    """Open the web UI in the browser (needs: pip install "reddit-post-analyzer[gui]")."""
+    try:
+        from streamlit.web import cli as streamlit_cli
+
+        from reddit_analyzer.gui import streamlit_app
+    except ModuleNotFoundError as exc:
+        if exc.name and exc.name.split(".")[0] in ("streamlit", "plotly"):
+            typer.echo(
+                "Error: the web UI needs Streamlit and Plotly. "
+                'Install them with: pip install "reddit-post-analyzer[gui]"',
+                err=True,
+            )
+            raise typer.Exit(1) from None
+        raise
+    streamlit_cli.main_run([streamlit_app.__file__, "--server.port", str(port)])
+
+
 def _version_callback(value: bool) -> None:
     if value:
         typer.echo(f"rpa {__version__}")

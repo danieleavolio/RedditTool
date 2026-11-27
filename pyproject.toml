@@ -31,7 +31,7 @@ dependencies = [
 
 [project.optional-dependencies]
 tui = ["textual>=0.80"]
-gui = ["streamlit>=1.40", "plotly>=5"]
+gui = ["streamlit>=1.50", "plotly>=5"]
 nlp = ["langdetect", "nltk", "scikit-learn"]
 parquet = ["pyarrow"]
 hf = ["datasets"]
@@ -48,6 +48,8 @@ dev = [
     "respx>=0.21",
     "ruff>=0.6",
     "textual>=8.2.8",
+    "streamlit>=1.50",
+    "plotly>=5",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -55,7 +57,7 @@ packages = ["src/reddit_analyzer"]
 
 [tool.ruff]
 line-length = 100
-extend-exclude = ["legacy", "*.md"]
+extend-exclude = ["*.md"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]

@@ -25,6 +25,7 @@ from textual.worker import get_current_worker
 
 from reddit_analyzer.datasets.builder import Stats
 from reddit_analyzer.errors import RedditError
+from reddit_analyzer.service import TEMPLATE, find_recipes
 from reddit_analyzer.tui.screens.common import CollectionPicker
 
 if TYPE_CHECKING:
@@ -32,30 +33,6 @@ if TYPE_CHECKING:
 
 NEW = ""  # the Select value for "start from a template"
 DEBOUNCE_SECONDS = 0.6
-
-TEMPLATE = """\
-name: my-dataset
-collection: {collection}
-unit: post            # post | comment | pair
-# search: "keywords"  # optional local full-text match
-
-filters:
-  min_score: 1
-  exclude_removed: true
-  min_chars: 40
-
-transform:
-  strip: [urls, markdown]
-  dedup: exact
-
-output:
-  format: jsonl       # csv | jsonl | parquet | hf
-"""
-
-
-def find_recipes(root: Path) -> list[Path]:
-    folder = root / "recipes"
-    return sorted(folder.rglob("*.yaml")) + sorted(folder.rglob("*.yml")) if folder.is_dir() else []
 
 
 def summarize(stats: Stats, unit: str, parts: list[str]) -> str:
