@@ -21,6 +21,23 @@ app.add_typer(db.app, name="db")
 app.command("export")(export.export_cmd)
 
 
+@app.command("tui")
+def tui_cmd() -> None:
+    """Open the terminal UI (needs: pip install "reddit-post-analyzer[tui]")."""
+    try:
+        from reddit_analyzer.tui.app import run
+    except ModuleNotFoundError as exc:
+        if exc.name and exc.name.split(".")[0] == "textual":
+            typer.echo(
+                "Error: the terminal UI needs Textual. "
+                'Install it with: pip install "reddit-post-analyzer[tui]"',
+                err=True,
+            )
+            raise typer.Exit(1) from None
+        raise
+    run()
+
+
 def _version_callback(value: bool) -> None:
     if value:
         typer.echo(f"rpa {__version__}")

@@ -75,6 +75,17 @@ Il progetto è organizzato nei seguenti moduli principali:
     ```
 3.  Streamlit avvierà un server locale e aprirà automaticamente l'applicazione nel tuo browser web predefinito.
 
+### Interfaccia da terminale (TUI)
+
+La nuova suite ha una TUI basata su [Textual](https://textual.textualize.io/), che richiede le credenziali Reddit (vedi `docs/reddit-credentials.md`) solo per raccogliere dati:
+
+```bash
+pip install "reddit-post-analyzer[tui]"
+rpa tui
+```
+
+Schermate (cambio con i tasti funzione): **F1** Dashboard, **F2** nuova raccolta (con log live e annulla), **F3** browser dei post con ricerca e commenti, **F4** editor di ricette dataset con anteprima live, **F5** statistiche. `Ctrl+P` apre la command palette (anche per cambiare tema). Per usarla nel browser: `textual serve "rpa tui"`.
+
 ---
 
 ## Documentazione dei Moduli
