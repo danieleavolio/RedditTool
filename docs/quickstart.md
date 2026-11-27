@@ -1,5 +1,18 @@
 # Quickstart
 
+## 0. Install
+
+The package is not on PyPI yet: install it from GitHub with [uv](https://docs.astral.sh/uv/)
+(Windows, macOS, Linux), then open a **new terminal**:
+
+```bash
+uv tool install "reddit-post-analyzer[tui,gui,nlp] @ git+https://github.com/danieleavolio/RedditTool"
+rpa --version
+```
+
+If `rpa` is not recognized (common on Windows with `pip`), run `python -m reddit_analyzer` instead,
+with the same arguments, or `uv run rpa` from a clone of the repository.
+
 ## 1. Credentials
 
 ```bash
