@@ -8,9 +8,12 @@ through :func:`get_credentials` from the environment or the system keyring.
 from __future__ import annotations
 
 import os
+import tomllib
 from pathlib import Path
+from typing import Any
 
 import platformdirs
+import tomli_w
 from pydantic import BaseModel, ConfigDict, Field, SecretStr
 from pydantic_settings import (
     BaseSettings,
@@ -20,7 +23,9 @@ from pydantic_settings import (
 )
 
 from reddit_analyzer import __version__
+from reddit_analyzer.errors import AuthError, CredentialStoreError
 
+SECRET_KEYS = ("client_secret", "refresh_token", "username")
 APP_NAME = "reddit-post-analyzer"
 KEYRING_SERVICE = APP_NAME
 ENV_PREFIX = "RPA_"
@@ -115,7 +120,7 @@ def load_settings() -> Settings:
     return Settings(**overrides)
 
 
-class MissingCredentialsError(RuntimeError):
+class MissingCredentialsError(AuthError):
     pass
 
 
@@ -139,6 +144,49 @@ def _keyring_get(key: str) -> str | None:
             return None  # no usable backend (e.g. headless Linux): fall back to env vars
     except ImportError:  # pragma: no cover - keyring is a hard dependency
         return None
+
+
+def _keyring_set(key: str, value: str) -> None:
+    import keyring
+    from keyring.errors import KeyringError
+
+    try:
+        keyring.set_password(KEYRING_SERVICE, key, value)
+    except KeyringError as exc:
+        raise CredentialStoreError(
+            "No system keyring available to store credentials. Set RPA_CLIENT_SECRET and "
+            f"RPA_REFRESH_TOKEN as environment variables instead. See {CREDENTIALS_DOC}."
+        ) from exc
+
+
+def _keyring_delete(key: str) -> None:
+    import keyring
+    from keyring.errors import KeyringError
+
+    try:
+        keyring.delete_password(KEYRING_SERVICE, key)
+    except KeyringError:
+        pass  # not stored, or no backend: nothing to remove
+
+
+def store_secret(key: str, value: str) -> None:
+    if key not in SECRET_KEYS:
+        raise ValueError(f"unknown secret: {key}")
+    _keyring_set(key, value)
+
+
+def clear_secrets() -> None:
+    for key in SECRET_KEYS:
+        _keyring_delete(key)
+
+
+def update_config_file(section: str, values: dict[str, Any]) -> None:
+    """Merge ``values`` into ``[section]`` of config.toml, creating the file if needed."""
+    path = config_file_path()
+    data = tomllib.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    data.setdefault(section, {}).update(values)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(tomli_w.dumps(data), encoding="utf-8")
 
 
 def get_credentials(settings: Settings | None = None) -> Credentials:
