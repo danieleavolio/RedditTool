@@ -73,3 +73,6 @@ logs/
 *.tmp
 *.temp
 *.orig
+
+# MkDocs build
+site/

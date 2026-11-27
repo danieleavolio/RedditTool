@@ -1,66 +1,91 @@
 # Reddit Post Analyzer
 
-Scarica, organizza ed esplora contenuti di Reddit in locale: raccogli post e commenti in SQLite,
-costruisci dataset da ricette YAML, analizzali. Tre interfacce sullo stesso core.
+[![CI](https://github.com/danieleavolio/RedditTool/actions/workflows/ci.yml/badge.svg)](https://github.com/danieleavolio/RedditTool/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/reddit-post-analyzer)](https://pypi.org/project/reddit-post-analyzer/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-> README completo (in inglese) in arrivo con la Fase 9. Il piano è in `docs/PIANO-SUITE.md`.
+Collect Reddit posts and comments into a local SQLite database, build reproducible datasets
+from YAML recipes, and explore everything from the command line, a terminal UI or a web UI.
+One core library, three interfaces.
 
-## Installazione
+Italiano: [README.it.md](README.it.md) · Docs: <https://danieleavolio.github.io/RedditTool/>
+
+<!-- TODO: add a GIF of the TUI here (docs/assets/tui.gif) -->
+
+## Quickstart
 
 ```bash
-pip install "reddit-post-analyzer[tui,gui]"   # core + CLI sempre inclusi
-rpa auth login                                 # credenziali Reddit (vedi docs/reddit-credentials.md)
+pip install "reddit-post-analyzer[tui,gui,nlp]"      # the core and the CLI are always included
+rpa auth login                                        # your own Reddit API credentials
+rpa collect search "rust" -s programming -n 500 --comments && rpa tui
 ```
 
-## Uso
+You need **your own Reddit API credentials**: the tool ships no keys. See
+[docs/reddit-credentials.md](docs/reddit-credentials.md) for how to set them up and what to do
+if you do not have any.
 
-| Comando | Cosa fa |
+## What it does
+
+| Command | What it does |
 |---|---|
-| `rpa collect search "rust" -s programming -n 500 --comments` | raccoglie post e commenti |
-| `rpa dataset build recipes/examples/ai-italia.yaml` | costruisce un dataset da una ricetta |
-| `rpa export <collection> --format jsonl -o out.jsonl` | esporta una collection |
-| `rpa tui` | interfaccia da terminale (Textual) |
-| `rpa gui` | interfaccia web (Streamlit) |
+| `rpa collect search "rust" -s programming -n 500 --comments` | search Reddit and store posts and comments |
+| `rpa collect subreddit italy --sort top -t year -n 1000` | read a subreddit listing |
+| `rpa runs list` / `rpa runs resume <id>` | interrupted collections continue where they stopped |
+| `rpa dataset build recipes/examples/ai-italia.yaml` | build a dataset from a recipe (filters, cleaning, split) |
+| `rpa export <collection> --format jsonl` | export a whole collection (CSV, JSONL, Parquet, Hugging Face) |
+| `rpa analyze <collection>` | statistics, keywords (TF-IDF), language and sentiment |
+| `rpa tui` | terminal UI (Textual) |
+| `rpa gui` | web UI (Streamlit) |
 
-**TUI:** **F1** Dashboard, **F2** nuova raccolta (log live e annulla), **F3** browser dei post con ricerca e commenti, **F4** editor di ricette con anteprima live, **F5** statistiche. `Ctrl+P` apre la command palette. Nel browser: `textual serve "rpa tui"`.
+Every command accepts `--json` for scripting. Run `rpa --help` or read the
+[CLI reference](https://danieleavolio.github.io/RedditTool/cli/).
 
-**GUI web:** pagine Collect, Explore, Dataset, Analysis, Settings. La raccolta gira in background: la pagina non si blocca e puoi annullarla o riprenderla.
+- **Datasets are recipes.** A YAML file describes sources, filters, text cleaning, deduplication
+  and an optional deterministic split. The same recipe on the same database gives the same output,
+  byte for byte, and writes a `dataset_card.md`.
+- **Resumable and incremental.** The same post found by two searches is stored once and belongs
+  to both collections.
+- **Analyzers are plugins.** Results are stored, so the TUI and the web UI show them without
+  recomputing. Write your own with an
+  [entry point](https://danieleavolio.github.io/RedditTool/analyzers/).
+- **Light.** SQLite and a few dependencies. Extras are opt-in: `[tui]`, `[gui]`, `[nlp]`,
+  `[parquet]`, `[hf]`.
 
-Il vecchio script Streamlit (cartella `legacy/`) è stato rimosso. Per importare il suo database: `rpa db import-legacy <file.db>`.
+**TUI keys:** `F1` dashboard, `F2` new collection, `F3` post browser, `F4` recipe editor with live
+preview, `F5` analysis, `Ctrl+P` command palette. In a browser: `textual serve "rpa tui"`.
 
----
+## Install from source
 
----
+```bash
+git clone https://github.com/danieleavolio/RedditTool && cd RedditTool
+uv sync --all-extras
+uv run pytest
+```
 
 ## Disclaimer
 
-Reddit Post Analyzer è uno strumento per **scaricare, organizzare ed esplorare** in locale
-contenuti di Reddit. Non è pensato né destinato all'addestramento di modelli di machine
-learning o AI.
+Reddit Post Analyzer is a tool for **downloading, organizing and exploring** Reddit
+content locally. It is not designed or intended for training machine learning or AI models.
 
-- Il progetto non è affiliato, approvato o sponsorizzato da Reddit, Inc.
-- Devi usare le tue credenziali API Reddit, approvate da Reddit, e rispettare User Agreement,
-  Developer Terms, Data API Terms e Responsible Builder Policy di Reddit.
-- Usare i dati di Reddit per addestrare modelli ML/AI, o per qualsiasi scopo commerciale,
-  richiede un'approvazione scritta di Reddit. Ottenerla è una tua responsabilità.
-- Il progetto non distribuisce dati di Reddit. Non ridistribuire i dataset creati con il
-  tool se non ne hai il permesso.
-- Rispetta la privacy degli utenti: elimina i contenuti rimossi da Reddit e non cercare di
-  identificare le persone.
+- This project is not affiliated with, endorsed by, or sponsored by Reddit, Inc.
+- You must use your own Reddit API credentials, approved by Reddit, and comply with
+  Reddit's User Agreement, Developer Terms, Data API Terms and Responsible Builder Policy.
+- Using Reddit data to train ML/AI models, or for any commercial purpose, requires
+  express written approval from Reddit. Obtaining it is your responsibility.
+- No Reddit data is distributed with this project. Do not redistribute datasets built
+  with it unless you are allowed to.
+- Respect users' privacy: delete content that has been removed from Reddit and do not
+  try to identify individuals.
 
-Il software è fornito "così com'è", senza garanzie. Gli autori non sono responsabili
-dell'uso che ne viene fatto.
+The software is provided "as is", without warranty. The authors are not responsible
+for how it is used.
 
----
+> **Status of Reddit's Data API.** Reddit stopped accepting new Data API access requests on
+> 31 Oct 2026 and plans to end remaining public access in March 2027. If you already have an
+> approved app the tool works for as long as Reddit keeps it active. Check your access before
+> relying on this tool.
 
-## Stato dell'API Reddit
+## Contributing and license
 
-> **Nota:** il tool usa l'API ufficiale con OAuth e le **tue** credenziali (vedi `docs/reddit-credentials.md`).
-> Reddit sta chiudendo l'accesso pubblico alla Data API nel 2026–2027: verifica lo stato del tuo
-> accesso prima di usare il tool.
-
----
-
-## Licenza
-
-Questo progetto è rilasciato sotto la Licenza MIT. Vedi il file [`LICENSE`](LICENSE).
+Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Released under the
+[MIT License](LICENSE).

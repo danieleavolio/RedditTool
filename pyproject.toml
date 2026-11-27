@@ -37,6 +37,12 @@ parquet = ["pyarrow"]
 hf = ["datasets"]
 ai = ["anthropic"]
 
+[project.urls]
+Homepage = "https://github.com/danieleavolio/RedditTool"
+Documentation = "https://danieleavolio.github.io/RedditTool/"
+Issues = "https://github.com/danieleavolio/RedditTool/issues"
+Changelog = "https://github.com/danieleavolio/RedditTool/blob/main/CHANGELOG.md"
+
 [project.scripts]
 rpa = "reddit_analyzer.cli.main:app"
 
@@ -53,6 +59,7 @@ dev = [
     "langdetect",
     "vaderSentiment",
 ]
+docs = ["mkdocs-material>=9", "mkdocs-typer>=0.0.3"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/reddit_analyzer"]
