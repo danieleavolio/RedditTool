@@ -24,7 +24,8 @@ class RedditScraper:
         self.num_posts_target = num_posts
         self.base_url = "https://www.reddit.com/search.json"
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
+            # Reddit chiede uno User-Agent descrittivo: sostituisci il placeholder con il tuo username.
+            'User-Agent': 'reddit-post-analyzer/0.1 (by /u/your_reddit_username)'
         }
         # Non memorizziamo più fetched_posts_data qui, fetch_posts lo restituirà
 

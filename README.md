@@ -24,6 +24,7 @@ Il progetto è organizzato nei seguenti moduli principali:
 *   `visualization.py`: Contiene funzioni per generare i grafici visualizzati nell'applicazione.
 *   `utils.py`: Modulo di utilità, principalmente per la configurazione del logging.
 *   `data/`: Cartella (creata automaticamente) che contiene il file del database `reddit_posts.db`.
+*   `docs/Documentation.md`: documentazione dettagliata dei moduli.
 
 ## Installazione e Avvio
 
@@ -38,8 +39,7 @@ Il progetto è organizzato nei seguenti moduli principali:
     ```bash
     # Se usi Git
     git clone <url-del-tuo-repository>
-    cd reddit_analyzer 
-    # Altrimenti, assicurati che tutti i file .py siano nella stessa cartella (es. reddit_analyzer/)
+    cd RedditTool
     ```
 
 2.  **Crea un Ambiente Virtuale (Consigliato):**
@@ -52,18 +52,7 @@ Il progetto è organizzato nei seguenti moduli principali:
     ```
 
 3.  **Installa le Dipendenze:**
-    Crea un file `requirements.txt` nella cartella principale del progetto (`reddit_analyzer/`) con il seguente contenuto:
-    ```
-    streamlit
-    requests
-    pandas
-    nltk
-    scikit-learn
-    plotly
-    # matplotlib è una dipendenza di wordcloud, ma wordcloud è stata rimossa.
-    # Se reintroduci wordcloud, aggiungila qui insieme a matplotlib.
-    ```
-    Poi esegui:
+    Le dipendenze sono elencate in `requirements.txt` nella cartella principale del progetto. Esegui:
     ```bash
     pip install -r requirements.txt
     ```
@@ -226,8 +215,36 @@ L'applicazione attuale fornisce una base solida, ma ci sono molte direzioni in c
 
 ---
 
+## Disclaimer
+
+Reddit Post Analyzer è uno strumento per **scaricare, organizzare ed esplorare** in locale
+contenuti di Reddit. Non è pensato né destinato all'addestramento di modelli di machine
+learning o AI.
+
+- Il progetto non è affiliato, approvato o sponsorizzato da Reddit, Inc.
+- Devi usare le tue credenziali API Reddit, approvate da Reddit, e rispettare User Agreement,
+  Developer Terms, Data API Terms e Responsible Builder Policy di Reddit.
+- Usare i dati di Reddit per addestrare modelli ML/AI, o per qualsiasi scopo commerciale,
+  richiede un'approvazione scritta di Reddit. Ottenerla è una tua responsabilità.
+- Il progetto non distribuisce dati di Reddit. Non ridistribuire i dataset creati con il
+  tool se non ne hai il permesso.
+- Rispetta la privacy degli utenti: elimina i contenuti rimossi da Reddit e non cercare di
+  identificare le persone.
+
+Il software è fornito "così com'è", senza garanzie. Gli autori non sono responsabili
+dell'uso che ne viene fatto.
+
+---
+
+## Stato dell'API Reddit
+
+> **Nota:** il codice attuale usa l'endpoint pubblico anonimo `reddit.com/search.json`, che
+> non è più in linea con le regole di Reddit. Sarà sostituito dall'accesso OAuth con credenziali
+> proprie nella prossima fase di sviluppo. Reddit sta chiudendo l'accesso pubblico alla Data API
+> nel 2026–2027: verifica lo stato del tuo accesso prima di usare il tool.
+
+---
+
 ## Licenza
 
-Questo progetto è rilasciato sotto la Licenza MIT. Vedi il file `LICENSE` (non creato in questo esempio, ma tipicamente si aggiunge) per maggiori dettagli.
-
-In breve, la Licenza MIT permette di usare, copiare, modificare, unire, pubblicare, distribuire, sublicenziare e/o vendere copie del software, a condizione che l'avviso di copyright originale e questa nota di permesso siano inclusi in tutte le copie o porzioni sostanziali del software. IL SOFTWARE VIENE FORNITO "COSÌ COM'È", SENZA GARANZIA DI ALCUN TIPO.
+Questo progetto è rilasciato sotto la Licenza MIT. Vedi il file [`LICENSE`](LICENSE).
