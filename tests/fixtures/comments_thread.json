@@ -1,0 +1,110 @@
+[
+  {
+    "_synthetic": true,
+    "kind": "Listing",
+    "data": {
+      "after": null,
+      "children": [
+        {
+          "kind": "t3",
+          "data": {
+            "id": "aaa111",
+            "name": "t3_aaa111",
+            "subreddit": "italy",
+            "author": "mario_rossi",
+            "title": "Cosa ne pensate dell'intelligenza artificiale?",
+            "selftext": "Vorrei sapere le vostre opinioni.\n\nGrazie!",
+            "url": "https://www.reddit.com/r/italy/comments/aaa111/cosa_ne_pensate/",
+            "permalink": "/r/italy/comments/aaa111/cosa_ne_pensate/",
+            "score": 154,
+            "upvote_ratio": 0.93,
+            "num_comments": 4,
+            "created_utc": 1767225600.0,
+            "over_18": false,
+            "is_self": true,
+            "link_flair_text": "Discussione",
+            "removed_by_category": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "kind": "Listing",
+    "data": {
+      "after": null,
+      "children": [
+        {
+          "kind": "t1",
+          "data": {
+            "id": "c1",
+            "link_id": "t3_aaa111",
+            "parent_id": "t3_aaa111",
+            "depth": 0,
+            "author": "luigi",
+            "body": "Secondo me è utile se usata bene.",
+            "score": 30,
+            "created_utc": 1767229200.0,
+            "replies": {
+              "kind": "Listing",
+              "data": {
+                "children": [
+                  {
+                    "kind": "t1",
+                    "data": {
+                      "id": "c2",
+                      "link_id": "t3_aaa111",
+                      "parent_id": "t1_c1",
+                      "depth": 1,
+                      "author": "[deleted]",
+                      "body": "[deleted]",
+                      "score": 2,
+                      "created_utc": 1767232800.0,
+                      "replies": ""
+                    }
+                  },
+                  {
+                    "kind": "t1",
+                    "data": {
+                      "id": "c3",
+                      "link_id": "t3_aaa111",
+                      "parent_id": "t1_c1",
+                      "depth": 1,
+                      "author": "AutoModerator",
+                      "body": "[removed]",
+                      "score": 1,
+                      "created_utc": 1767236400.0,
+                      "replies": ""
+                    }
+                  },
+                  {
+                    "kind": "more",
+                    "data": {
+                      "count": 7,
+                      "parent_id": "t1_c1",
+                      "children": ["c9", "c10"]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "kind": "t1",
+          "data": {
+            "id": "c4",
+            "link_id": "t3_aaa111",
+            "parent_id": "t3_aaa111",
+            "depth": 0,
+            "author": "anna",
+            "body": "Dipende da cosa intendi.",
+            "score": 8,
+            "created_utc": 1767240000.0,
+            "replies": ""
+          }
+        }
+      ]
+    }
+  }
+]

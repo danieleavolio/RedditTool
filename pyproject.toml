@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "reddit-post-analyzer"
+version = "0.2.0.dev0"
+description = "Download, organize and explore Reddit content locally: collect, build datasets, analyze."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "Daniele Avolio" }]
+keywords = ["reddit", "dataset", "nlp", "tui", "data-collection"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "httpx>=0.27",
+    "keyring>=25",
+    "platformdirs>=4",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "typer>=0.12",
+]
+
+[project.optional-dependencies]
+tui = ["textual>=0.80"]
+gui = ["streamlit>=1.40", "plotly>=5"]
+nlp = ["langdetect", "nltk", "scikit-learn"]
+parquet = ["pyarrow"]
+hf = ["datasets"]
+ai = ["anthropic"]
+
+[project.scripts]
+rpa = "reddit_analyzer.cli.main:app"
+
+[dependency-groups]
+dev = ["pytest>=8", "respx>=0.21", "ruff>=0.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/reddit_analyzer"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["legacy", "*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["live: hits the real Reddit API; skipped without RPA_* credentials"]
