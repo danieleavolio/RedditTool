@@ -1,0 +1,59 @@
+{
+  "_synthetic": true,
+  "kind": "Listing",
+  "data": {
+    "after": null,
+    "children": [
+      {
+        "kind": "t3",
+        "data": {
+          "id": "rem001",
+          "subreddit": "italy",
+          "author": "someone",
+          "title": "Post rimosso dai moderatori",
+          "selftext": "[removed]",
+          "url": "https://www.reddit.com/r/italy/comments/rem001/post_rimosso/",
+          "permalink": "/r/italy/comments/rem001/post_rimosso/",
+          "score": 1,
+          "upvote_ratio": 0.5,
+          "num_comments": 0,
+          "created_utc": 1767225600,
+          "over_18": false,
+          "is_self": true,
+          "link_flair_text": null,
+          "removed_by_category": "moderator"
+        }
+      },
+      {
+        "kind": "t3",
+        "data": {
+          "id": "del002",
+          "subreddit": "italy",
+          "author": "[deleted]",
+          "title": "Post cancellato dall'autore",
+          "selftext": "[deleted]",
+          "url": "https://www.reddit.com/r/italy/comments/del002/post_cancellato/",
+          "permalink": "/r/italy/comments/del002/post_cancellato/",
+          "score": 3,
+          "num_comments": 1,
+          "created_utc": 1767225700,
+          "over_18": false,
+          "is_self": true,
+          "removed_by_category": "deleted"
+        }
+      },
+      {
+        "kind": "t3",
+        "data": {
+          "id": "min003",
+          "subreddit": "python",
+          "author": "minimal",
+          "title": "Only the required fields",
+          "url": "https://example.com/x",
+          "permalink": "/r/python/comments/min003/only_the_required_fields/",
+          "created_utc": 1767225800
+        }
+      }
+    ]
+  }
+}

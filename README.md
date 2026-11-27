@@ -52,9 +52,9 @@ Il progetto è organizzato nei seguenti moduli principali:
     ```
 
 3.  **Installa le Dipendenze:**
-    Le dipendenze sono elencate in `requirements.txt` nella cartella principale del progetto. Esegui:
+    Le dipendenze sono elencate in `legacy/requirements.txt`. Esegui:
     ```bash
-    pip install -r requirements.txt
+    pip install -r legacy/requirements.txt
     ```
 
 4.  **Download dei Dati NLTK:**
@@ -71,7 +71,7 @@ Il progetto è organizzato nei seguenti moduli principali:
 1.  Assicurati di essere nella cartella principale del progetto (`reddit_analyzer/`).
 2.  Esegui il seguente comando nel tuo terminale:
     ```bash
-    streamlit run app.py
+    streamlit run legacy/app.py
     ```
 3.  Streamlit avvierà un server locale e aprirà automaticamente l'applicazione nel tuo browser web predefinito.
 

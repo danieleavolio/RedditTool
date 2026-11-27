@@ -1,0 +1,83 @@
+{
+  "_synthetic": true,
+  "kind": "Listing",
+  "data": {
+    "after": "t3_ccc333",
+    "before": null,
+    "dist": 3,
+    "children": [
+      {
+        "kind": "t3",
+        "data": {
+          "id": "aaa111",
+          "name": "t3_aaa111",
+          "subreddit": "italy",
+          "subreddit_id": "t5_2qkhk",
+          "author": "mario_rossi",
+          "title": "Cosa ne pensate dell'intelligenza artificiale?",
+          "selftext": "Vorrei sapere le vostre opinioni.\n\nGrazie!",
+          "url": "https://www.reddit.com/r/italy/comments/aaa111/cosa_ne_pensate/",
+          "permalink": "/r/italy/comments/aaa111/cosa_ne_pensate/",
+          "score": 154,
+          "ups": 154,
+          "upvote_ratio": 0.93,
+          "num_comments": 42,
+          "created_utc": 1767225600.0,
+          "over_18": false,
+          "is_self": true,
+          "link_flair_text": "Discussione",
+          "removed_by_category": null,
+          "domain": "self.italy"
+        }
+      },
+      {
+        "kind": "t3",
+        "data": {
+          "id": "bbb222",
+          "name": "t3_bbb222",
+          "subreddit": "programming",
+          "subreddit_id": "t5_2fwo",
+          "author": "rustacean",
+          "title": "Rust 2026 edition released",
+          "selftext": "",
+          "url": "https://blog.rust-lang.org/2026/rust-2026",
+          "permalink": "/r/programming/comments/bbb222/rust_2026_edition_released/",
+          "score": 2301,
+          "ups": 2301,
+          "upvote_ratio": 0.97,
+          "num_comments": 318,
+          "created_utc": 1767312000.0,
+          "over_18": false,
+          "is_self": false,
+          "link_flair_text": null,
+          "removed_by_category": null,
+          "domain": "blog.rust-lang.org"
+        }
+      },
+      {
+        "kind": "t3",
+        "data": {
+          "id": "ccc333",
+          "name": "t3_ccc333",
+          "subreddit": "AskReddit",
+          "subreddit_id": "t5_2qh1i",
+          "author": "night_owl",
+          "title": "What is the weirdest thing you have seen at 3am?",
+          "selftext": "",
+          "url": "https://www.reddit.com/r/AskReddit/comments/ccc333/weirdest_3am/",
+          "permalink": "/r/AskReddit/comments/ccc333/weirdest_3am/",
+          "score": 12,
+          "ups": 12,
+          "upvote_ratio": 0.71,
+          "num_comments": 5,
+          "created_utc": 1767398400.5,
+          "over_18": true,
+          "is_self": true,
+          "link_flair_text": "NSFW",
+          "removed_by_category": null,
+          "domain": "self.AskReddit"
+        }
+      }
+    ]
+  }
+}
