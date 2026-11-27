@@ -253,6 +253,16 @@ async def test_analysis_screen_shows_statistics(seeded):
         assert list(screen.query_one("#months", Sparkline).data) == [6.0]
 
 
+async def test_analysis_screen_computes_and_shows_analyzers(seeded):
+    async with make_app(seeded).run_test(size=SIZE) as pilot:
+        await pilot.press("f5")
+        text = pilot.app.screen.query_one("#analyzers-text", Static)
+        await wait_until(pilot, lambda: "Nothing computed yet" in str(text.render()))
+        await pilot.press("a")
+        await wait_until(pilot, lambda: "keywords:" in str(text.render()))
+        assert "sentiment:" in str(text.render())
+
+
 async def test_keys_switch_screens(settings):
     async with make_app(settings).run_test(size=SIZE) as pilot:
         for key, name in [

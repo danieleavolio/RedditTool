@@ -14,13 +14,15 @@ from pathlib import Path
 
 import yaml
 
+from reddit_analyzer import analyzers
+from reddit_analyzer.analyzers import Analyzer
 from reddit_analyzer.cli.collect import slugify
 from reddit_analyzer.collect.runner import CancelCheck, ProgressCallback, run_collection
 from reddit_analyzer.config import Settings, load_settings
 from reddit_analyzer.datasets.builder import BuildResult, Preview, build, preview
 from reddit_analyzer.datasets.recipe import Recipe, parse_recipe
 from reddit_analyzer.errors import DatasetError
-from reddit_analyzer.models import Comment, Post, Run
+from reddit_analyzer.models import AnalysisResult, Comment, Post, Run
 from reddit_analyzer.sources.base import Source
 from reddit_analyzer.sources.oauth import AuthStatus, RedditClient
 from reddit_analyzer.stats import CollectionStats, collection_stats
@@ -118,6 +120,22 @@ class Service:
     def stats(self, collection: str | None) -> CollectionStats:
         with self._db() as db:
             return collection_stats(db, collection)
+
+    # -- Analyzers ------------------------------------------------------------------------
+
+    @staticmethod
+    def analyzers() -> dict[str, Analyzer]:
+        return analyzers.available()
+
+    def saved_analyses(self, collection: str | None) -> dict[str, AnalysisResult]:
+        """Stored results by analyzer name. Cheap: nothing is recomputed."""
+        with self._db() as db:
+            return {a.analyzer: a for a in db.list_analyses(collection)}
+
+    def run_analyzer(self, name: str, collection: str | None) -> AnalysisResult:
+        """Compute and store one analyzer. May be slow: call it from a worker thread."""
+        with self._db() as db:
+            return analyzers.run(db, name, collection)
 
     # -- Collecting -----------------------------------------------------------------------
 

@@ -3,7 +3,7 @@
 import typer
 
 from reddit_analyzer import __version__
-from reddit_analyzer.cli import auth, collect, collection, dataset, db, export, runs
+from reddit_analyzer.cli import analyze, auth, collect, collection, dataset, db, export, runs
 from reddit_analyzer.cli.common import setup_logging
 
 app = typer.Typer(
@@ -19,6 +19,7 @@ app.add_typer(runs.app, name="runs")
 app.add_typer(dataset.app, name="dataset")
 app.add_typer(db.app, name="db")
 app.command("export")(export.export_cmd)
+app.command("analyze")(analyze.analyze_cmd)
 
 
 @app.command("tui")

@@ -32,7 +32,7 @@ dependencies = [
 [project.optional-dependencies]
 tui = ["textual>=0.80"]
 gui = ["streamlit>=1.50", "plotly>=5"]
-nlp = ["langdetect", "nltk", "scikit-learn"]
+nlp = ["langdetect", "vaderSentiment"]
 parquet = ["pyarrow"]
 hf = ["datasets"]
 ai = ["anthropic"]
@@ -50,6 +50,8 @@ dev = [
     "textual>=8.2.8",
     "streamlit>=1.50",
     "plotly>=5",
+    "langdetect",
+    "vaderSentiment",
 ]
 
 [tool.hatch.build.targets.wheel]

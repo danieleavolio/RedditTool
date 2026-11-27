@@ -133,3 +133,8 @@
     margin: 0 1;
     height: 3;
 }
+#analyzers-text {
+    margin: 0 1;
+    height: auto;
+    max-height: 8;
+}

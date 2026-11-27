@@ -29,6 +29,25 @@ def posts_per_month(stats: CollectionStats) -> go.Figure:
     return _layout(fig, "Posts per month")
 
 
+def activity_heatmap(activity: list[list[int]]) -> go.Figure:
+    """Posts by weekday (rows) and hour of the day (columns), UTC."""
+    days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    fig = go.Figure(
+        go.Heatmap(z=activity, x=list(range(24)), y=days, colorscale="Blues", showscale=False)
+    )
+    fig.update_yaxes(autorange="reversed")
+    fig.update_xaxes(title="Hour (UTC)", dtick=3)
+    return _layout(fig, "Activity by weekday and hour")
+
+
+def sentiment_by_month(by_month: list[list]) -> go.Figure:
+    months = [m for m, _ in by_month]
+    fig = go.Figure(go.Scatter(x=months, y=[v for _, v in by_month], mode="lines+markers"))
+    fig.update_xaxes(type="category")
+    fig.update_yaxes(range=[-1, 1])
+    return _layout(fig, "Mean sentiment per month (English posts)")
+
+
 def ranking(pairs: list[tuple[str, int]], title: str) -> go.Figure:
     """Horizontal bars, biggest on top."""
     ordered = list(reversed(pairs))

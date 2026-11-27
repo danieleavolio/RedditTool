@@ -20,6 +20,7 @@ from pydantic import TypeAdapter
 from reddit_analyzer.config import Settings, load_settings
 from reddit_analyzer.errors import StorageError
 from reddit_analyzer.models import (
+    AnalysisResult,
     Collection,
     Comment,
     ContentStatus,
@@ -414,3 +415,44 @@ class Database:
             args,
         )
         return row.fetchone()[0]
+
+    # -- Analysis results ---------------------------------------------------------------
+
+    def save_analysis(self, result: AnalysisResult) -> None:
+        """Store (or replace) the result of an analyzer. ``''`` stands for "all collections"."""
+        self._conn.execute(
+            "INSERT OR REPLACE INTO analysis_results(collection, analyzer, result, computed_at)"
+            " VALUES (?, ?, ?, ?)",
+            (
+                result.collection or "",
+                result.analyzer,
+                json.dumps(result.data),
+                result.computed_at.isoformat(),
+            ),
+        )
+
+    def list_analyses(self, collection: str | None = None) -> list[AnalysisResult]:
+        rows = self._conn.execute(
+            "SELECT * FROM analysis_results WHERE collection = ? ORDER BY analyzer",
+            (collection or "",),
+        )
+        return [
+            AnalysisResult(
+                analyzer=r["analyzer"],
+                collection=r["collection"] or None,
+                data=json.loads(r["result"]),
+                computed_at=_dt(r["computed_at"]),
+            )
+            for r in rows
+        ]
+
+    def get_analysis(self, analyzer: str, collection: str | None = None) -> AnalysisResult | None:
+        return next((a for a in self.list_analyses(collection) if a.analyzer == analyzer), None)
+
+    def set_post_languages(self, languages: dict[str, str]) -> None:
+        """Store the detected language (ISO code) of posts, by post id."""
+        with self.transaction():
+            self._conn.executemany(
+                "UPDATE posts SET lang = ? WHERE id = ?",
+                [(lang, post_id) for post_id, lang in languages.items()],
+            )

@@ -7,9 +7,13 @@ from typing import TYPE_CHECKING
 from rich.text import Text
 from textual import on, work
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.widgets import DataTable, Footer, Header, Label, Select, Sparkline, Static
 
+from reddit_analyzer import analyzers
+from reddit_analyzer.errors import RedditError
+from reddit_analyzer.models import AnalysisResult
 from reddit_analyzer.stats import CollectionStats
 from reddit_analyzer.tui.screens.common import ALL, CollectionPicker
 
@@ -19,6 +23,7 @@ if TYPE_CHECKING:
 
 class AnalysisScreen(CollectionPicker):
     app: RpaApp  # type: ignore[assignment]
+    BINDINGS = [Binding("a", "run_analyzers", "Compute analyses")]
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -39,6 +44,8 @@ class AnalysisScreen(CollectionPicker):
             with Vertical():
                 yield Label("Frequent words", classes="pane-title")
                 yield DataTable(id="t-words", cursor_type="row")
+        yield Label("Saved analyses (press A to compute)", classes="pane-title")
+        yield Static("", id="analyzers-text")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -69,7 +76,41 @@ class AnalysisScreen(CollectionPicker):
     @work(thread=True, exclusive=True, group="stats", exit_on_error=False)
     def _compute(self, collection: str | None) -> None:
         stats = self.app.service.stats(collection)
+        saved = self.app.service.saved_analyses(collection)
         self.app.call_from_thread(self._show, stats)
+        self.app.call_from_thread(self._show_saved, saved)
+
+    def action_run_analyzers(self) -> None:
+        self.query_one("#analyzers-text", Static).update("Computing ...")
+        self._run_all(str(self.query_one("#a-coll", Select).value) or None)
+
+    @work(thread=True, exclusive=True, group="analyzers", exit_on_error=False)
+    def _run_all(self, collection: str | None) -> None:
+        """Run every analyzer whose optional dependencies are installed; report the rest."""
+        service = self.app.service
+        notes = []
+        for name, analyzer in service.analyzers().items():
+            if name == "stats":  # shown live above
+                continue
+            if analyzers.missing_requirements(analyzer):
+                notes.append(analyzers.install_hint(analyzer))
+                continue
+            try:
+                service.run_analyzer(name, collection)
+            except RedditError as exc:
+                notes.append(f"{name}: {exc}")
+        saved = service.saved_analyses(collection)
+        self.app.call_from_thread(self._show_saved, saved, notes)
+
+    def _show_saved(self, saved: dict[str, AnalysisResult], notes: list[str] | None = None) -> None:
+        lines = []
+        for name, analyzer in self.app.service.analyzers().items():
+            if name in saved and name != "stats":
+                lines.append(f"{name}: {analyzer.summary(saved[name].data)}")
+        lines += notes or []
+        self.query_one("#analyzers-text", Static).update(
+            Text("\n".join(lines) or "Nothing computed yet.")
+        )
 
     def _show(self, stats: CollectionStats) -> None:
         if not stats.posts:

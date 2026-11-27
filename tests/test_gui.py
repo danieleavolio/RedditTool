@@ -99,6 +99,15 @@ def test_analysis_shows_metrics(seeded):
     assert at.metric[0].value == "6"
 
 
+def test_analysis_computes_an_analyzer(seeded):
+    at = open_app(seeded, "analysis")
+    keywords = next(b for b in at.button if b.key == "run-keywords")
+    assert keywords.label == "Compute"
+    keywords.click().run()
+    assert not at.exception
+    assert any("Computed" in c.value for c in at.caption)
+
+
 def test_dataset_previews_the_template(seeded):
     at = open_app(seeded, "dataset")
     assert not at.exception
