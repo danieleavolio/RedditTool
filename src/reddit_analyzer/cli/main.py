@@ -1,20 +1,24 @@
-"""Command line entry point (`rpa`). Commands arrive in later phases."""
+"""Command line entry point (`rpa`)."""
 
 import typer
 
 from reddit_analyzer import __version__
-from reddit_analyzer.cli import auth, dataset, db, runs
+from reddit_analyzer.cli import auth, collect, collection, dataset, db, export, runs
+from reddit_analyzer.cli.common import setup_logging
 
 app = typer.Typer(
     name="rpa",
     help="Reddit Post Analyzer: collect, store, build datasets from and analyze Reddit content.",
     no_args_is_help=True,
-    add_completion=False,
+    add_completion=True,
 )
 app.add_typer(auth.app, name="auth")
+app.add_typer(collect.app, name="collect")
+app.add_typer(collection.app, name="collections")
 app.add_typer(runs.app, name="runs")
-app.add_typer(db.app, name="db")
 app.add_typer(dataset.app, name="dataset")
+app.add_typer(db.app, name="db")
+app.command("export")(export.export_cmd)
 
 
 def _version_callback(value: bool) -> None:
@@ -28,8 +32,13 @@ def main(
     version: bool = typer.Option(
         False, "--version", callback=_version_callback, is_eager=True, help="Show version and exit."
     ),
+    quiet: bool = typer.Option(
+        False, "--quiet", "-q", help="Only print results and errors (no progress or notes)."
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Log debug details to stderr."),
 ) -> None:
-    """Reddit Post Analyzer."""
+    """Reddit Post Analyzer. Put --quiet/--verbose before the command: `rpa -q runs list`."""
+    setup_logging(quiet, verbose)
 
 
 if __name__ == "__main__":

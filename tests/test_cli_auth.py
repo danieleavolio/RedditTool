@@ -40,7 +40,7 @@ def test_login_stores_credentials_without_echoing_secrets(login_env, keyring_sto
 def test_login_rejected_stores_nothing(login_env, keyring_store):
     login_env.token.mock(return_value=httpx.Response(400, json={"error": "invalid_grant"}))
     result = runner.invoke(app, ["auth", "login", "--client-id", "cid"], input="s\n")
-    assert result.exit_code == 1
+    assert result.exit_code == 3
     assert "rejected" in result.output
     assert keyring_store == {} and not config.config_file_path().exists()
 
@@ -59,7 +59,7 @@ def test_test_command_ok(mock_reddit, keyring_store, monkeypatch):
 
 def test_test_command_without_credentials_points_to_guide():
     result = runner.invoke(app, ["auth", "test"])
-    assert result.exit_code == 1
+    assert result.exit_code == 3
     assert "reddit-credentials.md" in result.output
 
 
