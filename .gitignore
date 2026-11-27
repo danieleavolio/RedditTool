@@ -76,3 +76,6 @@ logs/
 
 # MkDocs build
 site/
+
+# Output of rpa export / dataset build
+out/

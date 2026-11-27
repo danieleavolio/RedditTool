@@ -1,7 +1,6 @@
 # Reddit Post Analyzer
 
 [![CI](https://github.com/danieleavolio/RedditTool/actions/workflows/ci.yml/badge.svg)](https://github.com/danieleavolio/RedditTool/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/reddit-post-analyzer)](https://pypi.org/project/reddit-post-analyzer/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **Scarica post e commenti di Reddit in un database locale, esplorali, analizzali e trasformali in
@@ -63,11 +62,20 @@ English: [README.md](README.md) · Documentazione (in inglese): <https://daniele
 
 ## Installazione
 
-Serve Python 3.11 o più recente.
+Serve Python 3.11 o più recente. Il pacchetto non è ancora su PyPI, quindi si installa direttamente
+da GitHub. Il modo consigliato è [uv](https://docs.astral.sh/uv/), su Windows, macOS e Linux:
 
 ```bash
-pip install "reddit-post-analyzer[tui,gui,nlp]"
+uv tool install "reddit-post-analyzer[tui,gui,nlp] @ git+https://github.com/danieleavolio/RedditTool"
 ```
+
+Questo mette il comando `rpa` nel PATH. Apri un **nuovo terminale** e lancia `rpa --version`.
+Per aggiornare in futuro: `uv tool upgrade reddit-post-analyzer`.
+
+Preferisci pip? Funziona anche
+`pip install "reddit-post-analyzer[tui,gui,nlp] @ git+https://github.com/danieleavolio/RedditTool"`,
+ma su Windows il comando `rpa` può non essere trovato perché la cartella `Scripts` di pip non è nel
+PATH. In quel caso usa `python -m reddit_analyzer` (stessi argomenti di `rpa`).
 
 Core e comando `rpa` sono sempre inclusi. Gli extra sono opzionali:
 
@@ -80,8 +88,8 @@ Core e comando `rpa` sono sempre inclusi. Gli extra sono opzionali:
 | `parquet` | export Parquet |
 | `hf` | export Hugging Face `datasets` (solo formato locale) |
 
-Verifica con `rpa --version`. Se un comando richiede un extra che non hai installato, ti dice la
-riga `pip install` esatta da lanciare.
+Verifica con `rpa --version`. Se un comando richiede un extra che non hai installato, aggiungilo al
+comando di installazione qui sopra (per esempio `[tui]`).
 
 <details>
 <summary>Installazione da sorgente (per contribuire)</summary>
@@ -90,6 +98,7 @@ riga `pip install` esatta da lanciare.
 git clone https://github.com/danieleavolio/RedditTool && cd RedditTool
 uv sync --all-extras
 uv run pytest
+uv run rpa --help        # lancia il tool dal clone, senza installarlo
 ```
 
 </details>
@@ -380,8 +389,12 @@ Per il backup copia `reddit.db`.
 
 ## Problemi comuni e FAQ
 
-**`rpa tui` / `rpa gui` dice che manca un extra.** Installalo:
-`pip install "reddit-post-analyzer[tui]"` oppure `[gui]`.
+**`rpa` non viene riconosciuto (Windows).** Il comando `rpa` non è nel PATH. Installa con
+`uv tool install` (vedi [Installazione](#installazione)) e apri un nuovo terminale, oppure usa
+`python -m reddit_analyzer` al posto di `rpa`, oppure `uv run rpa` da un clone del repository.
+
+**`rpa tui` / `rpa gui` dice che manca un extra.** Reinstalla con quell'extra tra parentesi, per
+esempio `uv tool install --force "reddit-post-analyzer[tui,gui,nlp] @ git+https://github.com/danieleavolio/RedditTool"`.
 
 **Codice 3, "credenziali mancanti o rifiutate".** Rilancia `rpa auth login`, poi `rpa auth test`.
 Controlla che il redirect URI sia esattamente `http://localhost:8080`.

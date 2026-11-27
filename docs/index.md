@@ -5,7 +5,7 @@ YAML recipes, and explore them from the command line (`rpa`), a terminal UI (`rp
 UI (`rpa gui`). All three are thin layers over one core library, so they always agree.
 
 ```bash
-pip install "reddit-post-analyzer[tui,gui,nlp]"
+uv tool install "reddit-post-analyzer[tui,gui,nlp] @ git+https://github.com/danieleavolio/RedditTool"
 rpa auth login
 rpa collect search "rust" -s programming -n 500 --comments && rpa tui
 ```

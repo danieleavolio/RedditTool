@@ -9,6 +9,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 - Analyzers as plugins: `stats` (with weekday/hour heatmap), `keywords` (TF-IDF), `language`,
   `sentiment` (English only), discovered through the `reddit_analyzer.analyzers` entry point.
 - `rpa analyze`, and stored results (`analysis_results`, migration 0002) shown by the TUI and web UI.
+- `python -m reddit_analyzer` as an alternative to the `rpa` command.
 - English and Italian READMEs, MkDocs documentation, contribution guide, issue and PR templates.
 - CI on Linux, Windows and macOS (Python 3.11 to 3.13) and PyPI release by tag.
 
