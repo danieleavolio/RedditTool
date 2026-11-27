@@ -33,3 +33,7 @@ class ServerError(RedditError):
 
 class CredentialStoreError(RedditError):
     """The system keyring is not available for writing."""
+
+
+class StorageError(RedditError):
+    """The local database is unusable, too new for this version, or a record is missing."""
